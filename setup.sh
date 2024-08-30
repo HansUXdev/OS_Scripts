@@ -44,6 +44,9 @@ if command -v conda &> /dev/null; then
     source ~/miniconda/bin/activate quant
     conda install -n quant -y pandas numpy scipy matplotlib seaborn scikit-learn tensorflow keras pytorch xgboost lightgbm catboost statsmodels ta-lib nltk spacy beautifulsoup4 scrapy plotly dask jupyterlab pycaret sympy sqlalchemy pandas-profiling fastapi streamlit vaex pyspark tensorboard holoviews transformers
     conda run -n quant python -m spacy download en_core_web_sm
+    conda install -n quant -y pip  # Ensure pip is available in the conda environment for other installations
+    # Financial Data Packages
+    conda run -n quant pip install yfinance pandas-datareader quandl alpha_vantage ccxt
     echo "Data Science & Quant environment setup completed with Conda." >> $SUCCESS_LOG
 else
     echo "Conda is not installed. Using pip to install packages globally."
@@ -79,6 +82,12 @@ else
     install_software "Tensorboard" "command -v tensorboard" "pip install tensorboard"
     install_software "Holoviews" "python3 -c 'import holoviews'" "pip install holoviews"
     install_software "Hugging Face Transformers" "python3 -c 'import transformers'" "pip install transformers"
+    # Financial Data Packages
+    install_software "yfinance" "python3 -c 'import yfinance'" "pip install yfinance"
+    install_software "pandas-datareader" "python3 -c 'import pandas_datareader'" "pip install pandas-datareader"
+    install_software "Quandl" "python3 -c 'import quandl'" "pip install quandl"
+    install_software "Alpha Vantage" "python3 -c 'import alpha_vantage'" "pip install alpha_vantage"
+    install_software "ccxt" "python3 -c 'import ccxt'" "pip install ccxt"
 fi
 
 # Video Editing and Recording
