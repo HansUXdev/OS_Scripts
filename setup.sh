@@ -29,10 +29,58 @@ install_software() {
     fi
 }
 
-# Check and install each software
+# Python
+install_software "Python" "command -v python3" "sudo apt update && sudo apt install -y python3 python3-pip"
+install_software "Conda" "command -v conda" "wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && bash ~/miniconda.sh -b -p $HOME/miniconda && export PATH=\"$HOME/miniconda/bin:$PATH\""
+
 # General Purpose Coding
 install_software "VSCode" "command -v code" "sudo apt update && sudo apt install -y code || sudo snap install code --classic"
 install_software "Jupyter Notebook" "command -v jupyter" "pip install jupyter"
+
+# Data Science & Quant Stuff
+if command -v conda &> /dev/null; then
+    echo "Conda is installed. Setting up the 'quant' environment with required packages."
+    conda create -n quant -y python=3.8
+    source ~/miniconda/bin/activate quant
+    conda install -n quant -y pandas numpy scipy matplotlib seaborn scikit-learn tensorflow keras pytorch xgboost lightgbm catboost statsmodels ta-lib nltk spacy beautifulsoup4 scrapy plotly dask jupyterlab pycaret sympy sqlalchemy pandas-profiling fastapi streamlit vaex pyspark tensorboard holoviews transformers
+    conda run -n quant python -m spacy download en_core_web_sm
+    echo "Data Science & Quant environment setup completed with Conda." >> $SUCCESS_LOG
+else
+    echo "Conda is not installed. Using pip to install packages globally."
+    install_software "Pandas" "python3 -c 'import pandas'" "pip install pandas"
+    install_software "NumPy" "python3 -c 'import numpy'" "pip install numpy"
+    install_software "SciPy" "python3 -c 'import scipy'" "pip install scipy"
+    install_software "Matplotlib" "python3 -c 'import matplotlib'" "pip install matplotlib"
+    install_software "Seaborn" "python3 -c 'import seaborn'" "pip install seaborn"
+    install_software "Scikit-learn" "python3 -c 'import sklearn'" "pip install scikit-learn"
+    install_software "TensorFlow" "python3 -c 'import tensorflow'" "pip install tensorflow"
+    install_software "Keras" "python3 -c 'import keras'" "pip install keras"
+    install_software "PyTorch" "python3 -c 'import torch'" "pip install torch"
+    install_software "XGBoost" "python3 -c 'import xgboost'" "pip install xgboost"
+    install_software "LightGBM" "python3 -c 'import lightgbm'" "pip install lightgbm"
+    install_software "CatBoost" "python3 -c 'import catboost'" "pip install catboost"
+    install_software "Statsmodels" "python3 -c 'import statsmodels'" "pip install statsmodels"
+    install_software "TA-lib" "python3 -c 'import talib'" "pip install TA-lib"
+    install_software "NLTK" "python3 -c 'import nltk'" "pip install nltk"
+    install_software "SpaCy" "python3 -c 'import spacy'" "pip install spacy && python3 -m spacy download en_core_web_sm"
+    install_software "Beautiful Soup" "python3 -c 'import bs4'" "pip install beautifulsoup4"
+    install_software "Scrapy" "python3 -c 'import scrapy'" "pip install scrapy"
+    install_software "Plotly" "python3 -c 'import plotly'" "pip install plotly"
+    install_software "Dask" "python3 -c 'import dask'" "pip install dask"
+    install_software "JupyterLab" "command -v jupyter-lab" "pip install jupyterlab"
+    install_software "PyCaret" "python3 -c 'import pycaret'" "pip install pycaret"
+    install_software "SymPy" "python3 -c 'import sympy'" "pip install sympy"
+    install_software "SQLAlchemy" "python3 -c 'import sqlalchemy'" "pip install sqlalchemy"
+    install_software "Pandas Profiling" "python3 -c 'import pandas_profiling'" "pip install pandas-profiling"
+    install_software "FastAPI" "python3 -c 'import fastapi'" "pip install fastapi"
+    install_software "Streamlit" "python3 -c 'import streamlit'" "pip install streamlit"
+    install_software "VAEX" "python3 -c 'import vaex'" "pip install vaex"
+    install_software "Pyspark" "python3 -c 'import pyspark'" "pip install pyspark"
+    install_software "Tensorboard" "command -v tensorboard" "pip install tensorboard"
+    install_software "Holoviews" "python3 -c 'import holoviews'" "pip install holoviews"
+    install_software "Hugging Face Transformers" "python3 -c 'import transformers'" "pip install transformers"
+fi
+
 # Video Editing and Recording
 install_software "OBS" "command -v obs" "sudo apt update && sudo apt install -y obs-studio"
 install_software "Kdenlive" "command -v kdenlive" "sudo apt update && sudo apt install -y kdenlive"
@@ -43,9 +91,6 @@ install_software "Opera" "command -v opera" "sudo apt update && sudo apt install
 install_software "Brave" "command -v brave-browser" "sudo apt install -y curl && sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg && echo 'deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main' | sudo tee /etc/apt/sources.list.d/brave-browser-release.list && sudo apt update && sudo apt install -y brave-browser"
 # Social
 install_software "Discord" "command -v discord" "sudo apt update && sudo apt install -y discord || sudo snap install discord"
-# Python
-install_software "Python" "command -v python3" "sudo apt update && sudo apt install -y python3 python3-pip"
-install_software "Conda" "command -v conda" "wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && bash ~/miniconda.sh -b -p $HOME/miniconda && export PATH=\"$HOME/miniconda/bin:$PATH\""
 # Web Stack
 install_software "Node.js" "command -v node" "sudo apt update && sudo apt install -y nodejs npm"
 install_software "NVM" "command -v nvm" "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash && source ~/.bashrc"
@@ -66,8 +111,6 @@ install_software "Ollama" "command -v ollama" "curl -fsSL https://ollama.com/ins
 install_software "Autogen" "command -v autogen" "sudo apt update && sudo apt install -y autogen"
 install_software "GPT4All" "command -v gpt4all" "pip install gpt4all"
 install_software "Stable Diffusion" "command -v sd" "pip install stable-diffusion"
-
-
 # Security Tools
 install_software "UFW" "command -v ufw" "sudo apt update && sudo apt install -y ufw && sudo ufw enable && sudo ufw default deny"
 install_software "ClamAV" "command -v clamscan" "sudo apt update && sudo apt install -y clamav clamav-daemon && sudo freshclam"
